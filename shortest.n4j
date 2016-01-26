@@ -1,0 +1,5 @@
+match p=(a:City{name:"Ath"})-[:route*]->(b:City{name:"Paris"})
+return p, reduce(len=0, r in relationships(p) | len+r.distance) as d
+order by d asc
+limit 1
+#better? http://stackoverflow.com/questions/11675980/how-do-i-call-neo4j-graphalgofactory-astar-algorithm-from-gremlin
