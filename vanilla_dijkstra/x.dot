@@ -1,0 +1,6 @@
+graph {
+a -- b [dist="1"];
+b -- c [dist="1"];
+b -- d [dist="9"];
+c -- d [dist="1"];
+}
