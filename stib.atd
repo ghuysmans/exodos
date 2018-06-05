@@ -1,0 +1,62 @@
+(* FIXME convert and move type definitions into a separate module *)
+(* FIXME field aliasing *)
+
+type stop = string
+
+type vehicle = {
+  directionId: stop;
+  distanceFromPoint: int;
+  pointId: stop;
+}
+
+type line = string
+
+type vehicle_line = {
+  lineId: line;
+  vehiclePositions: vehicle list
+}
+
+type vehicle_position = {
+  lines: vehicle_line list;
+}
+
+type arrival_time = {
+  expectedArrivalTime: string; (* FIXME *)
+  lineId: line;
+}
+
+type point = {
+  passingTimes: arrival_time list;
+  pointId: stop;
+}
+
+type passing_time = {
+  points: point list;
+}
+
+type trilingual = {
+  ?en: string option;
+  fr: string;
+  nl: string;
+}
+
+type message_content = {
+  text: trilingual;
+  content_type <json name="type">: string;
+}
+
+type id = {
+  id: string;
+}
+
+type message = {
+  content: message_content list;
+  lines: id list;
+  points: id list;
+  priority: int;
+  message_type <json name="type">: string;
+}
+
+type messages = {
+  messages: message list;
+}
