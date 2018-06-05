@@ -1,0 +1,39 @@
+type 'a info = {
+  (*
+  ~when_ <json name="when"> <ocaml default="None">: string wrap
+    <ocaml module="Calendar" t="Calendar.t option"
+    wrap="Calendar.of_json_o"
+    unwrap="Calendar.to_json_o">;
+  *)
+  ?when_ <json name="when">: string option;
+  what: string;
+  geom: 'a;
+}
+
+type geom_2 = float list wrap
+  <ocaml t="float * float"
+  wrap="function [a; b] -> a, b | _ -> failwith {|invalid geom_2|}"
+  unwrap="fun (a, b) -> [a; b]">
+type geom_n = geom_2 list
+
+type event = [
+| BoardEvent of geom_2 info
+| DescribeCrossingAtAlightEvent of geom_n info
+| AlightEvent of geom_2 info
+]
+
+
+type perf = {
+  cleanup_time: float;
+  narrative_postprocess_time: float;
+  path_query_time: float;
+}
+
+type path = {
+  performance: perf;
+  narrative: event list;
+}
+
+
+type path_retro =
+  event list

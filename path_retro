@@ -1,0 +1,98 @@
+[
+  [
+    "BoardEvent", 
+    {
+      "when": "2018-06-04 18:47:13+02:00", 
+      "what": "Board the 5-ERASME - HERRMANN-DEBROUX", 
+      "geom": [
+        4.362431, 
+        50.845628
+      ], 
+      "where": "PARC"
+    }
+  ], 
+  [
+    "AlightEvent", 
+    {
+      "when": "2018-06-04 19:09:11+02:00", 
+      "what": "Alight", 
+      "geom": [
+        4.266876, 
+        50.815186
+      ], 
+      "where": "ERASME"
+    }
+  ], 
+  [
+    "BoardEvent", 
+    {
+      "when": "2018-06-04 19:13:57+02:00", 
+      "what": "Board the 5-ERASME - HERRMANN-DEBROUX", 
+      "geom": [
+        4.266876, 
+        50.815186
+      ], 
+      "where": "ERASME"
+    }
+  ], 
+  [
+    "AlightEvent", 
+    {
+      "when": "2018-06-04 19:27:47+02:00", 
+      "what": "Alight", 
+      "geom": [
+        4.322974, 
+        50.853386
+      ], 
+      "where": "BEEKKANT"
+    }
+  ], 
+  [
+    "BoardEvent", 
+    {
+      "when": "2018-06-04 19:30:33+02:00", 
+      "what": "Board the 1-GARE DE L'OUEST - STOCKEL", 
+      "geom": [
+        4.322974, 
+        50.853386
+      ], 
+      "where": "BEEKKANT"
+    }
+  ], 
+  [
+    "AlightEvent", 
+    {
+      "when": "2018-06-04 19:55:12+02:00", 
+      "what": "Alight", 
+      "geom": [
+        4.464541, 
+        50.841872
+      ], 
+      "where": "STOCKEL"
+    }
+  ], 
+  [
+    "BoardEvent", 
+    {
+      "when": "2018-06-04 20:04:56+02:00", 
+      "what": "Board the 1-GARE DE L'OUEST - STOCKEL", 
+      "geom": [
+        4.464541, 
+        50.841872
+      ], 
+      "where": "STOCKEL"
+    }
+  ], 
+  [
+    "AlightEvent", 
+    {
+      "when": "2018-06-04 20:18:10+02:00", 
+      "what": "Alight", 
+      "geom": [
+        4.380974, 
+        50.842972
+      ], 
+      "where": "SCHUMAN"
+    }
+  ]
+]

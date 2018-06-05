@@ -1,0 +1,21 @@
+edge_handlers:
+    - name: graphserver.ext.routeserver.events.BoardEvent
+      args:
+        gtfsdb_filename: stib.gtfsdb
+        timezone_name: Europe/Brussels
+    - name: graphserver.ext.routeserver.events.DescribeCrossingAtAlightEvent
+      args:
+        gtfsdb_filename: stib.gtfsdb
+        timezone_name: Europe/Brussels
+    - name: graphserver.ext.routeserver.events.AlightEvent
+      args:
+        gtfsdb_filename: stib.gtfsdb
+        timezone_name: Europe/Brussels
+    - name: graphserver.ext.routeserver.events.HeadwayBoardEvent
+      args:
+        gtfsdb_filename: stib.gtfsdb
+        timezone_name: Europe/Brussels
+    - name: graphserver.ext.routeserver.events.HeadwayAlightEvent
+      args:
+        gtfsdb_filename: stib.gtfsdb
+        timezone_name: Europe/Brussels
