@@ -1,3 +1,6 @@
 true: package(atdgen)
 true: package(calendar)
 true: package(tyre)
+true: package(lwt.unix)
+true: package(cohttp.lwt)
+true: package(cmdliner)
