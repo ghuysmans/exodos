@@ -2,7 +2,7 @@ all: client.byte
 serve: bx.gdb
 	gs_routeserver $< handlers.yaml
 clean:
-	ocamlbuil -clean
+	ocamlbuild -clean
 %.byte:
 	ocamlbuild -use-ocamlfind $@
 
