@@ -1,5 +1,6 @@
 type 'a info = {
   (*
+  FIXME handle "about" with another type parameter
   ~when_ <json name="when"> <ocaml default="None">: string wrap
     <ocaml module="Calendar" t="Calendar.t option"
     wrap="Calendar.of_json_o"
@@ -7,6 +8,7 @@ type 'a info = {
   *)
   ?when_ <json name="when">: string option;
   what: string;
+  ?where: string option;
   geom: 'a;
 }
 
@@ -20,6 +22,9 @@ type event = [
 | BoardEvent of geom_2 info
 | DescribeCrossingAtAlightEvent of geom_n info
 | AlightEvent of geom_2 info
+| StreetStartEvent of geom_2 info
+| StreetTurnEvent of geom_2 info
+| StreetEndEvent of geom_2 info
 ]
 
 
@@ -37,3 +42,6 @@ type path = {
 
 type path_retro =
   event list
+
+
+type vertex_id = string

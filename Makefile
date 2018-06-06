@@ -15,3 +15,7 @@ bx.gdb: stib.gtfsdb
 
 stib.gtfsdb: stib.zip
 	gs_gtfsdb_compile $@ $<
+
+#gs_osmdb_compile bx.osm{,db}
+#gs_import_osm bx.gdb bx.osmdb
+#gs_link_osm_gtfs bx.gdb bx.osmdb stib.gtfsdb

@@ -12,23 +12,42 @@ let string_of_cal_o = Option.map (fun t ->
 let dump_narrative =
   let d t = Calendar.(of_json_o t |> string_of_cal_o) |> default_to "?" in
   Lwt_list.iter_s (function
-    | `BoardEvent {when_; what; _} ->
+    | `BoardEvent {when_; what; _}
+    | `StreetStartEvent {when_; what; _}
+    | `StreetTurnEvent {when_; what; _}
+    | `StreetEndEvent {when_; what; _} ->
       Lwt_io.printf "%s\t%s\n" (d when_) what
-    | `DescribeCrossingAtAlightEvent _ -> Lwt.return_unit
-    | `AlightEvent {when_; what; _} ->
-      Lwt_io.printf "%s\t%s\n" (d when_) what
+    | `AlightEvent {when_; where; geom = lat, lon; _} ->
+      Lwt_io.printf "%s\talight at %s (%f, %f)\n" (d when_)
+        (default_to "?" where)
+        lat lon
+    | `DescribeCrossingAtAlightEvent _ ->
+      Lwt.return_unit
   )
+
+let vertex_of_string s =
+  let open Tyre in
+  let re = route [
+    (float <&> char ',' *> (opt (char ' ')) *> float) --> fun (lat, lon) ->
+      Routeserver.vertex_of_geo ~lat ~lon
+    (* TODO *)
+  ] in
+  match exec re s with
+  | Ok x -> x
+  | Error _ -> failwith "vertex_of_string"
 
 let path retro src dst time = Lwt_main.run (
   let open Routeserver in
-  let src = point_of_stop src in
-  let dst = point_of_stop dst in
+  vertex_of_string src >>= fun src ->
+  vertex_of_string dst >>= fun dst ->
   let time = CalendarLib.Calendar.from_unixfloat time in
-  (if retro then
-    path_retro src dst time
-  else
-    path src dst time >|= fun p -> p.narrative
-  ) >|= dump_narrative
+  let p =
+    if retro then
+      path_retro src dst time
+    else
+      path src dst time >|= fun p -> p.narrative
+  in
+  p >|= dump_narrative
 )
 
 open Cmdliner

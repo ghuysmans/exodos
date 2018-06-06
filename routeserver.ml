@@ -4,10 +4,7 @@ let prot = ref "http"
 let port = ref 8080
 let host = ref "127.0.0.1"
 
-type point = string
-
-(* FIXME *)
-let point_of_stop stop = "sta-" ^ stop
+type vertex = string
 
 let params origin dest time = [
   "origin", ["\"" ^ origin ^ "\""];
@@ -17,6 +14,11 @@ let params origin dest time = [
 
 let get endpoint p =
   Http.call ~scheme:!prot ~host:!host ~port:!port `GET endpoint p
+
+let vertex_of_geo ~lat ~lon =
+  let sof = Printf.sprintf "%f" in
+  get "get_vertex_id" ["lat", [sof lat]; "lon", [sof lon]] >|=
+  Ag_util.Json.from_string Routeserver_j.read_vertex_id
 
 let path origin dest time =
   get "path" (params origin dest time) >|=
