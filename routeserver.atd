@@ -14,8 +14,8 @@ type 'a info = {
 
 type geom_2 = float list wrap
   <ocaml t="float * float"
-  wrap="function [a; b] -> a, b | _ -> failwith {|invalid geom_2|}"
-  unwrap="fun (a, b) -> [a; b]">
+  wrap="function [a; b] -> b, a | _ -> failwith {|invalid geom_2|}"
+  unwrap="fun (a, b) -> [b; a]">
 type geom_n = geom_2 list
 
 type event = [
