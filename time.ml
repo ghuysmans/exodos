@@ -7,7 +7,8 @@ let to_string t =
 
 let conv =
   let of_string s =
-    match Tyre.(exec (compile (int <&> char ':' *> int)) s) with
+    let re = Tyre.(compile (start *> int <&> char ':' *> int <* stop)) in
+    match Tyre.exec re s with
     | Ok (h, m) ->
       Ok (Calendar.create (Date.today ()) (Time.make h m 0))
     | Error _ ->

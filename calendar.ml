@@ -3,9 +3,11 @@
 type t = CalendarLib.Calendar.t
 
 let fmt = Tyre.(
+  start *>
   int <&> char '-' *> int <&> char '-' *> int <&> char ' ' *>
   int <&> char ':' *> int <&> char ':' *> int <&> (char '-' <|> char '+') <&>
   int <&> char ':' *> int
+  <* stop
 )
 
 let of_json s =

@@ -1,4 +1,3 @@
-(* FIXME type parameter *)
 type t =
   | Address of string
   | GPS of {lat: float; lng: float}
@@ -14,10 +13,16 @@ let conv =
   let of_string s =
     let open Tyre in
     let re = route [
-      (regex (Re.rg 'A' 'Z') --> fun _ ->
+      (start *> str "sta-" --> fun _ ->
+        Place s);
+      (start *> str "osm-" --> fun _ ->
+        Place s);
+      (start *> str "place_id:" --> fun _ ->
+        Place s);
+      (start *> regex (Re.rg 'A' 'Z') --> fun _ ->
         Address s);
-      (float <&> char ',' *> (opt (char ' ')) *> float) --> fun (lat, lng) ->
-        GPS {lat; lng}
+      (start *> float <&> char ',' *> (opt (char ' ')) *> float <* stop) -->
+        fun (lat, lng) -> GPS {lat; lng}
     ] in
     match exec re s with
     | Ok x -> Ok x
