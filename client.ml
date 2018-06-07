@@ -43,7 +43,12 @@ let path retro src dst time = Lwt_main.run (
     if retro then
       path_retro src dst time
     else
-      path src dst time >|= fun p -> p.narrative
+      path src dst time >|= fun p ->
+      Printf.fprintf stderr "clean=%f, narr=%f, query=%f\n"
+        p.performance.cleanup_time
+        p.performance.narrative_postprocess_time
+        p.performance.path_query_time;
+      p.narrative
   in
   p >|= dump_narrative
 )
