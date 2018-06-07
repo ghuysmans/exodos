@@ -1,15 +1,11 @@
 open Google_t
 open Lwt.Infix
 
-type point =
-  | Address of string
-  | GPS of {lat: float; lng: float}
-  | Place of string
-
-let string_of_point = function
+let string_of_point = Point.(function
   | Address s -> s
   | GPS {lat; lng} -> Printf.sprintf "%f,%f" lat lng
   | Place p -> "place_id:" ^ p
+)
 
 exception Failure of Google_t.status
 
@@ -21,8 +17,8 @@ let assert_ok {status; routes} =
 
 type wp =
   | Direct
-  | Waypoints of point list
-  | Optimized_waypoints of point list
+  | Waypoints of Point.t list
+  | Optimized_waypoints of Point.t list
 
 let directions_ ~time_p mode ?(wp=Direct) origin destination t alt =
   let t =
