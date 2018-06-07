@@ -6,11 +6,17 @@ let host = ref "127.0.0.1"
 
 type vertex = string
 
-let params origin dest time = [
-  "origin", ["\"" ^ origin ^ "\""];
-  "dest", ["\"" ^ dest ^ "\""];
-  "currtime", [Printf.sprintf "%.0f" (CalendarLib.Calendar.to_unixfloat time)]
-]
+let params origin dest time =
+  let t =
+    match time with
+    | None -> CalendarLib.Calendar.now ()
+    | Some t -> t
+  in
+  [
+    "origin", ["\"" ^ origin ^ "\""];
+    "dest", ["\"" ^ dest ^ "\""];
+    "currtime", [Printf.sprintf "%.0f" (CalendarLib.Calendar.to_unixfloat t)]
+  ]
 
 let get endpoint p =
   Http.call ~scheme:!prot ~host:!host ~port:!port `GET endpoint p
