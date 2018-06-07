@@ -24,16 +24,22 @@ let dump_narrative =
       Lwt.return_unit
   )
 
+let stops = lazy (Stops.of_file "stops.txt")
+
+(* FIXME match ^ *)
 let vertex_of_string s =
   let open Tyre in
   let re = route [
+    (regex (Re.rg 'A' 'Z') --> fun _ ->
+      Lazy.force stops >|= fun arr ->
+      let s = Stops.find_by_prefix arr s in
+      Routeserver.vertex_of_name s.Stops.stop_id);
     (float <&> char ',' *> (opt (char ' ')) *> float) --> fun (lat, lon) ->
       Routeserver.vertex_of_geo ~lat ~lon
-    (* TODO *)
   ] in
   match exec re s with
   | Ok x -> x
-  | Error _ -> failwith "vertex_of_string"
+  | Error _ -> Lwt.fail_with "vertex_of_string"
 
 let path retro src dst time = Lwt_main.run (
   let open Routeserver in

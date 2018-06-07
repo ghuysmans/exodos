@@ -21,6 +21,8 @@ let params origin dest time =
 let get endpoint p =
   Http.call ~scheme:!prot ~host:!host ~port:!port `GET endpoint p
 
+let vertex_of_name n = n
+
 let vertex_of_geo ~lat ~lon =
   let sof = Printf.sprintf "%f" in
   get "get_vertex_id" ["lat", [sof lat]; "lon", [sof lon]] >|=

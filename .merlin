@@ -5,3 +5,4 @@ PKG tyre
 PKG lwt.unix
 PKG cohttp.lwt
 PKG cmdliner
+PKG csv
