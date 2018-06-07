@@ -1,0 +1,122 @@
+type coord = {
+  lat: float;
+  lng: float;
+}
+
+type mode = [
+  | DRIVING
+  | WALKING
+  | TRANSIT
+]
+
+type value = {
+  value: int;
+  text: string;
+}
+
+type vehicle_type = [
+  | RAIL
+  | METRO_RAIL
+  | SUBWAY
+  | TRAM
+  | MONORAIL
+  | HEAVY_RAIL
+  | COMMUTER_TRAIN
+  | HIGH_SPEED_TRAIN
+  | BUS
+  | INTERCITY_BUS
+  | TROLLEYBUS
+  | SHARE_TAXI
+  | FERRY
+  | CABLE_CAR
+  | GONDOLA_LIFT (* aerial cable car *)
+  | FUNICULAR (* pulled up a steep incline by a cable *)
+  | OTHER
+]
+
+type vehicle = {
+  name: string;
+  type_ <json name="type">: vehicle_type;
+  icon: string;
+  ?local_icon: string option;
+}
+
+type agency = {
+  name: string;
+  url: string;
+}
+
+type line = {
+  agencies: agency list;
+  name: string;
+  short_name: string;
+  vehicle: vehicle;
+}
+
+type stop = {
+  location: coord;
+  name: string;
+}
+
+type transit = {
+  arrival_stop: stop;
+  arrival_time: value;
+  departure_stop: stop;
+  departure_time: value;
+  headsign: string;
+  line: line;
+  num_stops: int;
+}
+
+type step = {
+  travel_mode: mode;
+  ?transit_details: transit option;
+  start_location: coord;
+  end_location: coord;
+  duration: value;
+  html_instructions: string;
+  polyline: polyline;
+  distance: value;
+}
+
+(* For each waypoint... but we can't use them for transit *)
+type leg = {
+  (*
+  leg_departure_time <json name="departure_time">: value;
+  leg_arrival_time <json name="departure_time">: value;
+  *)
+  departure_time: value;
+  arrival_time: value;
+  distance: value;
+  duration: value;
+  steps: step list;
+}
+
+type polyline = {
+  points: string;
+}
+
+type route = {
+  legs: leg list;
+  overview_polyline: polyline;
+  summary: string;
+  warnings: string list;
+  waypoint_order: int list;
+}
+
+type status = [
+  | OK
+  | NOT_FOUND
+  | ZERO_RESULTS
+  | MAX_WAYPOINTS_EXCEEDED
+  | MAX_ROUTE_LENGTH_EXCEEDED
+  | INVALID_REQUEST
+  | OVER_QUERY_LIMIT
+  | REQUEST_DENIED
+  | UNKNOWN_ERROR
+]
+
+type path = {
+  routes: route list;
+  status: status;
+}

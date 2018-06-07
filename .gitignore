@@ -7,3 +7,4 @@
 *.byte
 *.swp
 _build/
+config.ml
