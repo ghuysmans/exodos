@@ -5,11 +5,8 @@ let default_to d = function
   | Some x -> x
   | None -> d
 
-let string_of_cal t =
-  CalendarLib.Calendar.(Printf.sprintf "%02d:%02d" (hour t) (minute t))
-
 let dump_narrative =
-  let d t = Calendar.(of_json_o t |> Option.map string_of_cal) |> default_to "?" in
+  let d t = Calendar.(of_json_o t |> Option.map Time.to_string) |> default_to "?" in
   Lwt_list.iter_s (function
     | `BoardEvent {when_; what; _}
     | `StreetStartEvent {when_; what; _}
@@ -73,20 +70,9 @@ let retro =
   let doc = "time is the arrival time" in
   Arg.(value & flag & info ~doc ["r"; "retro"])
 
-let time =
-  let of_string s =
-    match Tyre.(exec (compile (int <&> char ':' *> int)) s) with
-    | Ok (h, m) ->
-      Ok (CalendarLib.(Calendar.create (Date.today ()) (Time.make h m 0)))
-    | Error _ ->
-      Error (`Msg "invalid time (expected hh:mm)")
-  in
-  let print fmt t = Format.fprintf fmt "%s" (string_of_cal t) in
-  Arg.conv ~docv:"time (hh:mm)" (of_string, print)
-
 let time_opt =
   let doc = "time (default: now)" in
-  Arg.(value & opt (some time) None & info ~doc ["t"; "time"])
+  Arg.(value & opt (some Time.conv) None & info ~doc ["t"; "time"])
 
 let path_cmd =
   let doc = "find a path between two stops" in
