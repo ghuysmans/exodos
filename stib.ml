@@ -1,43 +1,56 @@
+open Stib_t
 open Lwt.Infix
-
-type token = Token of string
 
 let host = "opendata-api.stib-mivb.be"
 
 let token ~consumer_key ~secret_key =
   let b64 = B64.encode (consumer_key ^ ":" ^ secret_key) in
   let headers = Cohttp.Header.init_with "Authorization" ("Basic " ^ b64) in
-  Http.call ~headers ~host `POST "token" [] >>= fun t ->
-  Lwt.return (Token t)
+  let d = ["grant_type", ["client_credentials"]] in
+  Http.call ~headers ~host `POST "token" d >|=
+  Ag_util.Json.from_string Stib_j.read_token
 
-let get (Token t) endpoint =
-  let headers = Cohttp.Header.init_with "Authorization" ("Bearer " ^ t) in
+let get {token_type; access_token} endpoint =
+  let headers =
+    let a = token_type ^ " " ^ access_token in
+    Cohttp.Header.init_with "Authorization" a
+  in
   Http.call ~headers ~host `GET endpoint []
 
-type line = string
-
-let vehicles token lines =
+let vehicles_of_lines token lines =
   let ids = String.concat "," lines in
-  get token ("OperationMonitoring/1.0/VehiclePositionByLine/" ^ ids)
-  (* FIXME parse *)
+  get token ("OperationMonitoring/2.0/VehiclePositionByLine/" ^ ids) >|=
+  Ag_util.Json.from_string Stib_j.read_vehicle_position >|= fun t ->
+  List.map (fun l -> l.lineId, l.vehiclePositions) t.vp_lines
 
-let waiting_time token lines =
+
+let next_at_stops token lines =
   let ids = String.concat "," lines in
-  get token ("OperationMonitoring/2.0/PassingTimeByPoint/" ^ ids)
-  (* FIXME parse *)
+  get token ("OperationMonitoring/2.0/PassingTimeByPoint/" ^ ids) >|=
+  Ag_util.Json.from_string Stib_j.read_passing_time >|= fun t ->
+  t.points |> List.map (fun p ->
+    p.pointId,
+    p.passingTimes |> List.map (fun {expectedArrivalTime; at_lineId} ->
+      at_lineId, expectedArrivalTime
+    )
+  )
 
-let message_by_line token lines =
+
+let messages_of_lines token lines =
   let ids = String.concat "," lines in
-  get token ("OperationMonitoring/2.0/MessageByLine/" ^ ids)
-  (* FIXME parse *)
+  get token ("OperationMonitoring/2.0/MessageByLine/" ^ ids) >|=
+  Ag_util.Json.from_string Stib_j.read_messages >|= fun t ->
+  t.messages
 
-let message_by_stop token stops =
+let messages_of_stops token stops =
   let ids = String.concat "," stops in
-  get token ("OperationMonitoring/2.0/MessageByPoint/" ^ ids)
-  (* FIXME parse *)
+  get token ("OperationMonitoring/2.0/MessageByPoint/" ^ ids) >|=
+  Ag_util.Json.from_string Stib_j.read_messages >|= fun t ->
+  t.messages
+
 
 let dump_positions =
   List.iter (fun v ->
     let open Stib_t in
-    Printf.printf "%s,%d,%s\n" v.directionId v.distanceFromPoint v.pointId
+    Printf.printf "%s,%d,%s\n" v.direction v.distance v.point
   )
