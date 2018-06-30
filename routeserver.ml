@@ -52,7 +52,7 @@ let path_retro origin dest time =
 
 let dump =
   let d t =
-    Calendar.(of_json_o t |> Option.map Time.to_string) |>
+    Option.map Time.to_string t |>
     Option.default_to "?"
   in
   Lwt_list.iter_s Routeserver_j.(function

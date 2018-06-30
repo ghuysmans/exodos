@@ -1,21 +1,16 @@
+type date = string wrap <ocaml module="Calendar">
+
 type 'a info = {
-  (*
-  FIXME handle "about" with another type parameter
-  ~when_ <json name="when"> <ocaml default="None">: string wrap
-    <ocaml module="Calendar" t="Calendar.t option"
-    wrap="Calendar.of_json_o"
-    unwrap="Calendar.to_json_o">;
-  *)
-  ?when_ <json name="when">: string option;
+  ?when_ <json name="when">: date option;
   what: string;
   ?where: string option;
   geom: 'a;
 }
 
-type geom_2 = float list wrap
+type geom_2 = (float * float) wrap
   <ocaml t="float * float"
-  wrap="function [a; b] -> b, a | _ -> failwith {|invalid geom_2|}"
-  unwrap="fun (a, b) -> [b; a]">
+  wrap="fun (a, b) -> b, a"
+  unwrap="fun (a, b) -> b, a">
 type geom_n = geom_2 list
 
 type event = [
