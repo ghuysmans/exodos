@@ -45,7 +45,7 @@ type trilingual = {
 }
 
 type message_content = {
-  text: trilingual;
+  text: trilingual list;
   content_type <json name="type">: string;
 }
 
@@ -58,7 +58,7 @@ type message = {
   ?lines: id list option;
   points: id list;
   priority: int;
-  message_type <json name="type">: string;
+  typ <json name="type">: string;
 }
 
 type messages = {

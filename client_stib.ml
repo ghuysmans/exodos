@@ -4,7 +4,7 @@ open Lwt.Infix
 
 let () = Lwt_main.run (
   Config.(token ~consumer_key:stib_ck ~secret_key:stib_sk) >>= fun token ->
-  messages_of_stops token ["3064"] >>=
+  messages_of_stops token [Sys.argv.(1)] >>=
   (*
   Lwt_list.iter_s (fun (l, vs) ->
     Lwt_io.printf "%s:\n" l >>= fun () ->
@@ -20,7 +20,9 @@ let () = Lwt_main.run (
   *)
   Lwt_list.iter_s (fun m ->
     let c = List.hd m.content in
-    Lwt_io.printf "fr=%s\n" c.text.fr >>= fun () ->
+    c.text |> Lwt_list.iter_s (fun {fr; _} ->
+      Lwt_io.printf "fr=%s\n" fr
+    ) >>= fun () ->
     m.points |> Lwt_list.iter_s (fun {id} ->
       Lwt_io.printf " %s\n" id
     )
