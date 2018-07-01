@@ -20,13 +20,15 @@ type occupancy = {
   name: string;
 } <ocaml field_prefix="oc_">
 
+type time = int wrap <ocaml module="Irail_calendar">
+
 type alert = {
   id: int;
   header: string;
   lead: string;
   link: string; (* FIXME URL-decode it *)
-  start_time <json name="startTime">: int;
-  end_time <json name="endTime">: int;
+  start_time <json name="startTime">: time;
+  end_time <json name="endTime">: time;
 } <ocaml field_prefix="al_">
 
 type alerts = {
@@ -42,7 +44,7 @@ type arrdep = {
   id: int;
   delay: int;
   station <json name="stationinfo">: station_info;
-  time: int;
+  time: time;
   vehicle: string;
   platform <json name="platforminfo">: platform_info;
   canceled: bool_as_int;
@@ -61,7 +63,7 @@ type departures = {
 type liveboard_d = {
   (*
   version: string;
-  timestamp: int;
+  timestamp: time;
   stationinfo: station_info;
   *)
   departures: departures wrap <ocaml t="arrdep list"
@@ -77,7 +79,7 @@ type arrivals = {
 type liveboard_a = {
   (*
   version: string;
-  timestamp: int;
+  timestamp: time;
   stationinfo: station_info;
   *)
   arrivals: arrivals wrap <ocaml t="arrdep list"
@@ -110,7 +112,7 @@ type connection = {
 type connections = {
   (*
   version: string;
-  timestamp: int;
+  timestamp: time;
   *)
   connection: connection list;
 }
@@ -126,15 +128,15 @@ type stop = {
   id: int;
   delay: int;
   station <json name="stationinfo">: station_info;
-  time: int;
+  time: time;
   platform <json name="platforminfo">: platform_info;
   canceled: bool_as_int;
   connection <json name="departureConnection">: string;
   occupancy: occupancy;
   departure_delay <json name="departureDelay">: int;
   departure_canceled <json name="departureCanceled">: bool_as_int;
-  scheduled_departure_time <json name="scheduledDepartureTime">: int;
-  scheduled_arrival_time <json name="scheduled_arrivalTime">: int;
+  scheduled_departure_time <json name="scheduledDepartureTime">: time;
+  scheduled_arrival_time <json name="scheduled_arrivalTime">: time;
   arrival_delay <json name="arrivalDelay">: int;
   arrival_canceled <json name="arrivalCanceled">: bool_as_int;
   is_extra_stop <json name="isExtraStop">: bool_as_int;
@@ -148,7 +150,7 @@ type stops = {
 type vehicle = {
   (*
   version: string;
-  timestamp: int;
+  timestamp: time;
   *)
   info <json name="vehicleinfo">: vehicle_info;
   stops: stops wrap <ocaml t="stop list"
