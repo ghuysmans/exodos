@@ -19,10 +19,7 @@ type vehicle_position = {
   vp_lines <json name="lines">: vehicle_line list;
 }
 
-type time = string wrap
-  <ocaml t="Stib_calendar.t"
-  wrap="Stib_calendar.of_json"
-  unwrap="Stib_calendar.to_json">
+type time = string wrap <ocaml module="Stib_calendar">
 
 type arrival_time = {
   expectedArrivalTime: time;

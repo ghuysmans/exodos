@@ -1,4 +1,4 @@
-type date = string wrap <ocaml module="Calendar">
+type date = string wrap <ocaml module="Routeserver_calendar">
 
 type 'a info = {
   ?when_ <json name="when">: date option;
