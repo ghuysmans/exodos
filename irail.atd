@@ -1,0 +1,157 @@
+type station_info = {
+  id: string;
+  lat <json name="locationX">: float;
+  lng <json name="locationY">: float;
+  standard_name <json name="standardname">: string;
+  name: string;
+} <ocaml field_prefix="sta_">
+
+type bool_as_int = int wrap
+  <ocaml t="bool"
+  wrap="fun x -> x=1"
+  unwrap="fun x -> if x then 1 else 0">
+
+type platform_info = {
+  name: string;
+  normal: bool_as_int;
+} <ocaml field_prefix="pl_">
+
+type occupancy = {
+  name: string;
+} <ocaml field_prefix="oc_">
+
+type alert = {
+  id: int;
+  header: string;
+  lead: string;
+  link: string; (* FIXME URL-decode it *)
+  start_time <json name="startTime">: int;
+  end_time <json name="endTime">: int;
+} <ocaml field_prefix="al_">
+
+type alerts = {
+  number: int;
+  alert: alert list;
+} <ocaml field_prefix="als_">
+
+type alerts' = alerts wrap <ocaml t="alert list"
+  wrap="fun x -> x.als_alert"
+  unwrap="fun l -> {als_number=List.length l; als_alert=l}">
+
+type arrdep = {
+  id: int;
+  delay: int;
+  station <json name="stationinfo">: station_info;
+  time: int;
+  vehicle: string;
+  platform <json name="platforminfo">: platform_info;
+  canceled: bool_as_int;
+  left: bool_as_int;
+  connection <json name="departureConnection">: string;
+  occupancy: occupancy;
+  ?alerts: alerts' option;
+  ?walking: bool_as_int option;
+}
+
+type departures = {
+  number: int;
+  departure: arrdep list;
+} <ocaml field_prefix="ds_">
+
+type liveboard_d = {
+  (*
+  version: string;
+  timestamp: int;
+  stationinfo: station_info;
+  *)
+  departures: departures wrap <ocaml t="arrdep list"
+    wrap="fun x -> x.ds_departure"
+    unwrap="fun l -> {ds_number=List.length l; ds_departure=l}">
+}
+
+type arrivals = {
+  number: int;
+  arrival: arrdep list;
+} <ocaml field_prefix="ars_">
+
+type liveboard_a = {
+  (*
+  version: string;
+  timestamp: int;
+  stationinfo: station_info;
+  *)
+  arrivals: arrivals wrap <ocaml t="arrdep list"
+    wrap="fun x -> x.ars_arrival"
+    unwrap="fun l -> {ars_number=List.length l; ars_arrival=l}">
+}
+
+type via = {
+  id: string;
+  arrival: arrdep;
+  departure: arrdep;
+  time_between <json name="timeBetween">: int;
+  vehicle: string;
+} <ocaml field_prefix="vi_">
+
+type vias = {
+  number: int;
+  via: via list;
+} <ocaml field_prefix="vs_">
+
+type connection = {
+  id: int;
+  departure: arrdep;
+  arrival: arrdep;
+  vias: vias wrap <ocaml t="via list"
+    wrap="fun x -> x.vs_via"
+    unwrap="fun l -> {vs_number=List.length l; vs_via=l}">
+} <ocaml field_prefix="co_">
+
+type connections = {
+  (*
+  version: string;
+  timestamp: int;
+  *)
+  connection: connection list;
+}
+
+type vehicle_info = {
+  name: string;
+  lat <json name="locationX">: float;
+  lng <json name="locationY">: float;
+  short_name <json name="shortname">: string;
+} <ocaml field_prefix="ve_">
+
+type stop = {
+  id: int;
+  delay: int;
+  station <json name="stationinfo">: station_info;
+  time: int;
+  platform <json name="platforminfo">: platform_info;
+  canceled: bool_as_int;
+  connection <json name="departureConnection">: string;
+  occupancy: occupancy;
+  departure_delay <json name="departureDelay">: int;
+  departure_canceled <json name="departureCanceled">: bool_as_int;
+  scheduled_departure_time <json name="scheduledDepartureTime">: int;
+  scheduled_arrival_time <json name="scheduled_arrivalTime">: int;
+  arrival_delay <json name="arrivalDelay">: int;
+  arrival_canceled <json name="arrivalCanceled">: bool_as_int;
+  is_extra_stop <json name="isExtraStop">: bool_as_int;
+} <ocaml field_prefix="sto_">
+
+type stops = {
+  number: int;
+  stop: stop list;
+} <ocaml field_prefix="stos_">
+
+type vehicle = {
+  (*
+  version: string;
+  timestamp: int;
+  *)
+  info <json name="vehicleinfo">: vehicle_info;
+  stops: stops wrap <ocaml t="stop list"
+    wrap="fun x -> x.stos_stop"
+    unwrap="fun l -> {stos_number=List.length l; stos_stop=l}">
+}
