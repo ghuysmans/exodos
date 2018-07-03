@@ -12,5 +12,5 @@ let () = Lwt_main.run (
       else
         Printf.sprintf "+%d" (delay / 60)
     in
-    Lwt_io.printf "%s%s\t%s\n" (Time.to_string time) d sta_name
+    Lwt_io.printf "%s%-5s%s\n" (Time.to_string time) d sta_name
 )
