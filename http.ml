@@ -10,7 +10,7 @@ let call
   | `GET ->
     Cohttp_lwt_unix.Client.get ~headers (uri query)
   | `POST ->
-    let body = Uri.encoded_of_query query |> Cohttp_lwt_body.of_string in
+    let body = Uri.encoded_of_query query |> Cohttp_lwt.Body.of_string in
     let headers = Cohttp.Header.add headers
       "Content-type"
       "application/x-www-form-urlencoded"
@@ -18,5 +18,5 @@ let call
     Cohttp_lwt_unix.Client.post ~body ~headers (uri [])
   ) >>= fun (resp, body) ->
   match Cohttp.Response.status resp with
-  | `OK -> body |> Cohttp_lwt_body.to_string
+  | `OK -> body |> Cohttp_lwt.Body.to_string
   | status -> raise @@ HttpError (Cohttp.Code.code_of_status status)

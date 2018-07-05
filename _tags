@@ -1,7 +1,8 @@
+true: thread
 true: package(atdgen)
 true: package(calendar)
 true: package(tyre)
 true: package(lwt.unix)
-true: package(cohttp.lwt)
+true: package(cohttp-lwt-unix)
 true: package(cmdliner)
-true: package(csv.lwt)
+true: package(csv-lwt)

@@ -1,0 +1,22 @@
+opam-version: "1.2"
+name: "exodos"
+version: "0.1"
+maintainer: "Guillaume Huysmans <ghuysmans99@gmail.com>"
+authors: "Guillaume Huysmans <ghuysmans99@gmail.com>"
+homepage: "https://github.com/ghuysmans/exodos/"
+bug-reports: "https://github.com/ghuysmans/exodos/issues"
+dev-repo: "https://github.com/ghuysmans/exodos/"
+build: [
+  [make]
+]
+depends: [
+  "ocamlfind"
+  "atdgen"
+  "calendar"
+  "tyre"
+  "lwt"
+  "cohttp-lwt-unix"
+  "cmdliner"
+  "csv-lwt"
+  "tls"
+]
