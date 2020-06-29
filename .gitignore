@@ -2,11 +2,8 @@
 *.gtfsdb
 *.zip
 *.txt
-*_j.ml*
-*_t.ml*
-*.byte
-*.swp
 _build/
+.merlin
 config.ml
 *.osm*
 *.pdf

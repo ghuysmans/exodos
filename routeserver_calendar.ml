@@ -10,7 +10,7 @@ let fmt = Tyre.(
 
 let wrap s =
   match Tyre.(exec (compile fmt) s) with
-  | Ok ((((((((year, month), day), hour), minute), second), d), th), 0) ->
+  | Ok ((((((((year, month), day), hour), minute), second), _), th), 0) ->
     let open CalendarLib in
     Calendar.lmake ~year ~month ~day ~hour ~minute ~second () |>
     Time_Zone.(on Calendar.to_gmt (UTC_Plus th))

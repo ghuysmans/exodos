@@ -4,13 +4,13 @@ open Lwt.Infix
 let host = "opendata-api.stib-mivb.be"
 
 let token ~consumer_key ~secret_key =
-  let b64 = B64.encode (consumer_key ^ ":" ^ secret_key) in
+  let b64 = Base64.encode_exn (consumer_key ^ ":" ^ secret_key) in
   let headers = Cohttp.Header.init_with "Authorization" ("Basic " ^ b64) in
   let d = ["grant_type", ["client_credentials"]] in
   Http.call ~headers ~host `POST "token" d >|=
   Ag_util.Json.from_string Stib_j.read_token
 
-let get {token_type; access_token} endpoint =
+let get {token_type; access_token; _} endpoint =
   let headers =
     let a = token_type ^ " " ^ access_token in
     Cohttp.Header.init_with "Authorization" a
@@ -47,10 +47,3 @@ let messages_of_stops token stops =
   get token ("OperationMonitoring/2.0/MessageByPoint/" ^ ids) >|=
   Ag_util.Json.from_string Stib_j.read_messages >|= fun t ->
   t.messages
-
-
-let dump_positions =
-  List.iter (fun v ->
-    let open Stib_t in
-    Printf.printf "%s,%d,%s\n" v.direction v.distance v.point
-  )

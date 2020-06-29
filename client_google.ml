@@ -9,7 +9,7 @@ let path retro src dst time = Lwt_main.run (
     else
       path src dst time
   in
-  p |> get_one >>= fun {legs; summary; _} ->
+  p |> get_one >>= fun {legs; _} ->
   legs |> Lwt_list.iter_s (fun l ->
     Lwt_io.printf "%s -> %s, %s, %s, %d steps\n"
       l.departure_time.text

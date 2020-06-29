@@ -1,0 +1,35 @@
+(rule
+ (targets google_t.ml google_t.mli)
+ (deps google.atd)
+ (action (run atdgen -t %{deps})))
+(rule
+ (targets google_j.ml google_j.mli)
+ (deps google.atd)
+ (action (run atdgen -j %{deps})))
+(rule
+ (targets irail_t.ml irail_t.mli)
+ (deps irail.atd)
+ (action (run atdgen -t %{deps})))
+(rule
+ (targets irail_j.ml irail_j.mli)
+ (deps irail.atd)
+ (action (run atdgen -j %{deps})))
+(rule
+ (targets routeserver_t.ml routeserver_t.mli)
+ (deps routeserver.atd)
+ (action (run atdgen -t %{deps})))
+(rule
+ (targets routeserver_j.ml routeserver_j.mli)
+ (deps routeserver.atd)
+ (action (run atdgen -j %{deps})))
+(rule
+ (targets stib_t.ml stib_t.mli)
+ (deps stib.atd)
+ (action (run atdgen -t %{deps})))
+(rule
+ (targets stib_j.ml stib_j.mli)
+ (deps stib.atd)
+ (action (run atdgen -j %{deps})))
+(executable
+ (name client_google)
+ (libraries atdgen-runtime calendar cohttp-lwt-unix cmdliner tyre csv-lwt base64))

@@ -12,7 +12,7 @@ let stops = lazy (Stops.of_file "stops.txt")
 *)
 
 let place_of_point = Point.(function
-  | Address a ->
+  | Address _ ->
     (*
     Lazy.force stops >|= fun arr ->
     let s = Stops.find_by_prefix arr a in
