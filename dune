@@ -1,12 +1,4 @@
 (rule
- (targets google_t.ml google_t.mli)
- (deps google.atd)
- (action (run atdgen -t %{deps})))
-(rule
- (targets google_j.ml google_j.mli)
- (deps google.atd)
- (action (run atdgen -j %{deps})))
-(rule
  (targets irail_t.ml irail_t.mli)
  (deps irail.atd)
  (action (run atdgen -t %{deps})))
@@ -31,5 +23,5 @@
  (deps stib.atd)
  (action (run atdgen -j %{deps})))
 (executable
- (name client_google)
+ (name client_irail)
  (libraries atdgen-runtime calendar cohttp-lwt-unix cmdliner tyre csv-lwt base64))
